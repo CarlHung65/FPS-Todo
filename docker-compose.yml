@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: my-postgres-test
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # 關鍵：將容器內的資料路徑對應到具名資料卷
+
+volumes:
+  pgdata:  # 在最外層宣告這個具名資料卷
