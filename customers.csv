@@ -1,0 +1,11 @@
+emp_id,name,gender,email,phone,department,salary,hire_date
+E001,張小明,M,xiaoming.chang@company.com,0912-345-678,資訊部,65000,2021-03-15
+E002,陳美玲,F,meiling.chen@company.com,0923111222,行銷部,52000,2020/05/01
+E003,  林偉翔  ,Male,weixiang.lin@company.com,0934-567-890,業務部,48000,2022-08-10
+E004,黃雅婷,Female,yating.huang@companycom,0945-678-901,HR,45000,2023-01-20
+E005,劉建宏,M,jianhong.liu@company.com,0956-789-012,資訊部,-50000,2019-11-05
+E002,陳美玲,F,meiling.chen@company.com,0923111222,行銷部,52000,2020/05/01
+E007,王淑芬,女,shufen.wang@company.com,N/A,財務部,58000,2018-04-12
+E008,蔡宗翰,M,zonghan.tsai@company.com,0978-901-234,人力資源部,5000000,2022-06-30
+E009, 郭佳蓉 ,F,,0989-012-345,行銷部,47000,2023-09-01
+E010,鄭宇軒,M,yuxuan.zheng@company.com,0990-123-456,IT,62000,2021-12-15
