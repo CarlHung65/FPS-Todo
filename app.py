@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+from datetime import date
 
 st.set_page_config(page_title="Employees Management System", layout="wide")
 
@@ -47,3 +48,45 @@ if data:
 
 else:
     st.info("No data. Please check backend service is running.")
+
+# ----------------- 側邊欄：新增員工表單 -----------------
+with st.sidebar:
+    st.header("➕ 新增員工")
+    
+    with st.form("add_employee_form", clear_on_submit=True):
+        emp_id = st.text_input("員工編號 (必填)*", placeholder="例如：E005")
+        name = st.text_input("姓名 (必填)*", placeholder="例如：張小明")
+        gender = st.selectbox("性別", ["Male", "Female", "Other"])
+        email = st.text_input("Email", placeholder="test@example.com")
+        phone = st.text_input("電話", placeholder="0912345678")
+        department = st.text_input("部門", placeholder="研發部")
+        salary = st.number_input("薪水", min_value=0.0, step=1000.0, value=45000.0)
+        hire_date = st.date_input("到職日期", value=date.today())
+        
+        submitted = st.form_submit_button("送出新增")
+        
+        if submitted:
+            if not emp_id or not name:
+                st.warning("⚠️ 請填寫必填欄位 (員工編號與姓名)")
+            else:
+                # 打包要傳給 FastAPI 的 JSON 資料
+                payload = {
+                    "emp_id": emp_id,
+                    "name": name,
+                    "gender": gender,
+                    "email": email if email else None,
+                    "phone": phone if phone else None,
+                    "department": department if department else None,
+                    "salary": salary,
+                    "hire_date": str(hire_date)  # 日期轉為字串 ISO 格式 (YYYY-MM-DD)
+                }
+                
+                # 發送 POST 請求給 FastAPI
+                res = requests.post(API_URL, json=payload)
+                
+                if res.status_code == 201:
+                    st.success(f"🎉 成功新增員工：{name}！")
+                    st.rerun()  # 重新整理頁面以抓取最新資料
+                else:
+                    error_msg = res.json().get("detail", "新增失敗")
+                    st.error(f"❌ 新增失敗：{error_msg}")
