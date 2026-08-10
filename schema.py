@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
-# 定義員工資料回傳到前端的格式
+# 員工資料回傳到前端的格式
 class EmployeeSchema(BaseModel):
     id: int
     emp_id: str
@@ -18,10 +18,20 @@ class EmployeeSchema(BaseModel):
         # 讓 Pydantic 能夠自動轉譯 SQLAlchemy 的 ORM 物件
         from_attributes = True
 
-# 定義前端新增員工資料格式
+# 前端新增員工資料格式
 class EmpolyeeCreate(BaseModel):
     emp_id: str
     name: str
+    gender: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    department: Optional[str] = None
+    salary: Optional[float] = None
+    hire_date: Optional[date] = None
+
+# 修改員工資料
+class EmployeeUpdate(BaseModel):
+    name: Optional[str] = None
     gender: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None

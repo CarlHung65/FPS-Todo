@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Depends, HTTPException, status # type: ignore
+from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session, sessionmaker
 from typing import List
-from schema import EmployeeSchema, EmpolyeeCreate
+from schema import EmployeeSchema, EmpolyeeCreate, EmployeeUpdate
 
 from database import engine, Base
 from model import Employee
@@ -44,7 +44,7 @@ def get_all_employees(db: Session = Depends(get_db)):
     employees = db.query(Employee).all()
     return employees
 
-# 新增員工
+# --- 新增員工 ---
 @app.post("/employees", response_model=EmployeeSchema, status_code=status.HTTP_201_CREATED)
 def create_employee(employee: EmpolyeeCreate, db: Session = Depends(get_db)):
     # 檢查 emp_id 是否已存在 (因為 models.py 設定 unique=True)
@@ -61,6 +61,33 @@ def create_employee(employee: EmpolyeeCreate, db: Session = Depends(get_db)):
     db.refresh(new_employee)
 
     return new_employee
+
+# --- 修改員工資料 ---
+@app.put("/employees/{emp_id}", response_model=EmployeeSchema)
+def update_employee(emp_id: int, employee_data: EmployeeUpdate, db: Session = Depends(get_db)):
+    emp = db.query(Employee).filter(Employee.id == emp_id).first()
+    if not emp:
+        raise HTTPException(status_code=404, detail="找不到該員工資料")
+    
+    # 只更新有傳入值的欄位 (exclude_unset=True)
+    update_data = employee_data.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(emp, key, value)
+        
+    db.commit()
+    db.refresh(emp)
+    return emp
+
+# --- 刪除員工資料 ---
+@app.delete("/employees/{emp_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_employee(emp_id: int, db: Session = Depends(get_db)):
+    emp = db.query(Employee).filter(Employee.id == emp_id).first()
+    if not emp:
+        raise HTTPException(status_code=404, detail="找不到該員工資料")
+    
+    db.delete(emp)
+    db.commit()
+    return None
 
 # ------------------- API 路由定義 -------------------
 

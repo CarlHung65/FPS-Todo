@@ -1,8 +1,8 @@
 import os
 from urllib.parse import quote_plus
-from sqlalchemy import create_engine # type: ignore
+from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
-from dotenv import load_dotenv # type: ignore
+from dotenv import load_dotenv
 
 load_dotenv()
 
