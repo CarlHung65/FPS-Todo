@@ -67,6 +67,7 @@ Streamlit：對話式 UI（st.chat_input / st.chat_message）與文件上傳區�
 資料庫驅動：psycopg2-binary 或 asyncpg
 前端：streamlit, requests / httpx
 ```
+```
 [ 前端 / 瀏覽器 / Streamlit ]
                │
                │ 1. 發送 HTTP GET /employees 請求
